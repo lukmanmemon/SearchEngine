@@ -1,4 +1,5 @@
 from scrapy.spiders import CrawlSpider, Rule
+from scrapy.crawler import CrawlerProcess
 from scrapy.linkextractors import LinkExtractor
 from w3lib.url import url_query_cleaner
 import extruct
@@ -11,7 +12,18 @@ def process_links(links):
 
 class WebSpider(CrawlSpider):
     name = 'web_spider'
-    start_urls = ['https://www.ryerson.ca/']
+    start_urls = ['https://www.ryerson.ca/', 'https://www.blogto.com/']
+    custom_settings = {
+        'ROBOTSTXT_OBEY': 'True',
+        'CLOSESPIDER_PAGECOUNT': '20',
+        'HTTPCACHE_ENABLED': 'False',
+        'COOKIES_ENABLED': 'False',
+        'LOG_ENABLED': 'True',
+        'DEFAULT_REQUEST_HEADERS': {
+            'Accept': 'text/html',
+            'Accept-Language': 'en',
+        },
+    }
     rules = (
         Rule(LinkExtractor(), 
         process_links=process_links,
@@ -25,8 +37,21 @@ class WebSpider(CrawlSpider):
         return {
             'url': response.url,
             'metadata': extruct.extract(
-                response.text,
                 response.url,
-                syntaxes=['opengraph', 'json-ld']
+                response.text,
+                syntaxes=['opengraph']
             ),
+            'text': response.css("::text").extract(),
         }
+
+process = CrawlerProcess(settings={
+    "FEEDS": {
+        "items.json": {"format": "json"},
+    },
+})
+
+process.crawl(WebSpider)
+process.start() # the script will block here until the crawling is finished
+
+
+
