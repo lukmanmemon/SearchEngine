@@ -12,7 +12,7 @@ def process_links(links):
 
 class WebSpider(CrawlSpider):
     name = 'web_spider'
-    start_urls = ['https://www.ryerson.ca/', 'https://www.blogto.com/']
+    start_urls = ['https://www.ryerson.ca/', 'https://www.yorku.ca/', 'https://www.utoronto.ca/']
     custom_settings = {
         'ROBOTSTXT_OBEY': 'True',
         'CLOSESPIDER_PAGECOUNT': '20',
