@@ -36,12 +36,13 @@ class WebSpider(CrawlSpider):
     def parse_item(self, response):
         return {
             'url': response.url,
+            'text': response.css("::text").extract(),
+            'title': response.css('title::text').extract(),
             'metadata': extruct.extract(
                 response.url,
                 response.text,
-                syntaxes=['opengraph']
+                syntaxes=['opengraph', 'json-ld']
             ),
-            'text': response.css("::text").extract(),
         }
 
 process = CrawlerProcess(settings={
