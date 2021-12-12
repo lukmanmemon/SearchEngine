@@ -117,7 +117,7 @@ def search(query_input):
     for key, value in topK_rel_documents:
         top_ret_documents.append([url_list[key], title_list[key], description_list[key]])
         rank = rank + 1
-    print(top_ret_documents)
+
     return top_ret_documents
 
 search("Computer Science Ryerson")
