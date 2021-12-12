@@ -66,10 +66,17 @@
       const qValue1 = document.querySelector('query')
       
 
-      function submitted(event) {
+     function submitted(event) {
         event.preventDefault();
         valueQ = q.value
-        const input1 = JSON.stringify(valueQ.split(" "));
+        
+        const data = JSON.stringify(valueQ);
+        fs.writeFile('user.json', data, (err) => {
+            if (err) {
+                throw err;
+            }
+            console.log("JSON data is saved.");
+        });
       }
 
       f.addEventListener('submit', submitted);
