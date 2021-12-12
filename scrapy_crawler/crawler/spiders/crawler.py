@@ -1,10 +1,11 @@
-from scrapy.spiders import CrawlSpider, Rule
-from scrapy.crawler import CrawlerProcess
 from scrapy.linkextractors import LinkExtractor
+from scrapy.crawler import CrawlerProcess
+from scrapy.spiders import CrawlSpider, Rule
 from w3lib.url import url_query_cleaner
 import extruct
+import os.path
 
-# Remove query strings from URLs to limit number of requests
+
 def process_links(links):
     for link in links:
         link.url = url_query_cleaner(link.url)
@@ -12,7 +13,7 @@ def process_links(links):
 
 class WebSpider(CrawlSpider):
     name = 'web_spider'
-    start_urls = ['https://www.ryerson.ca/', 'https://www.yorku.ca/', 'https://www.utoronto.ca/']
+    start_urls = ['https://www.ryerson.ca/']
     custom_settings = {
         'ROBOTSTXT_OBEY': 'True',
         'CLOSESPIDER_PAGECOUNT': '20',
@@ -25,25 +26,32 @@ class WebSpider(CrawlSpider):
         },
     }
     rules = (
-        Rule(LinkExtractor(), 
-        process_links=process_links,
-        callback='parse_item',
-        follow=True
+        Rule(
+            LinkExtractor(),
+            process_links=process_links,
+            callback='parse_item',
+            follow=True
         ),
     )
-    
-    # Get specified data for each web page
+
     def parse_item(self, response):
         return {
             'url': response.url,
             'text': response.css("::text").extract(),
             'title': response.css('title::text').extract(),
             'metadata': extruct.extract(
-                response.url,
                 response.text,
+                response.url,
                 syntaxes=['opengraph', 'json-ld']
             ),
         }
+
+# Erase file content if file exists
+if os.path.exists('items.json'):
+    file = open('items.json', "r+")
+    contents = file.read().split("\n")
+    file.seek(0)                        
+    file.truncate()
 
 process = CrawlerProcess(settings={
     "FEEDS": {
