@@ -11,7 +11,7 @@ def invert(testMode=False, testFilePath=""):
         file_object = open(testFilePath + "items.json", "r")
     else:
         # Read json file
-        file_object = open("crawler/spiders/items.json", "r")
+        file_object = open("items.json", "r")
     json_content = file_object.read()
     file_object.close()
     # Convert json file to list
@@ -106,7 +106,7 @@ def invert(testMode=False, testFilePath=""):
             tf_counter[key] = 0
 
     # Open txt file and write postings list to it
-    write_file_postings = open(testFilePath + "postings.txt","w")
+    write_file_postings = open(testFilePath + "postings.txt","w", encoding='utf-8')
     write_file_postings.write( str(postings_list) )
     write_file_postings.close()
     

@@ -1,17 +1,21 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 import json
 import search
 
 app = Flask(__name__)
 
-# On Server start, check to see whether the crawler/scraper has run and compiled its data, if not then do so ie. check for file 
-# Check to see if inverted indices have been generated from scraped data, if not do so
+# On Server start, check to see whether the crawler/scraper has run and
+# compiled its data, if not then do so ie. check for file Check to see if
+# inverted indices have been generated from scraped data, if not do so
 
 
+@app.route("/")
+def display_spa():
+    return send_from_directory('../static', 'index.html')
 
 
 @app.route("/search")
-def fbiOpenUpSearch():
+def search_cosine_pagerank():
     query_string = request.args.get('query')
     search_results = search.search(query_string)
     return json.dumps(search_results)
