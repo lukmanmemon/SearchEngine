@@ -1,15 +1,19 @@
-from flask import Flask
+from flask import Flask, request
 import json
 import search
 
 app = Flask(__name__)
 
+# On Server start, check to see whether the crawler/scraper has run and compiled its data, if not then do so ie. check for file 
+# Check to see if inverted indices have been generated from scraped data, if not do so
 
-@app.route("/")
+
+
+
+@app.route("/search")
 def fbiOpenUpSearch():
-    # FOr now this is just the default search, will include the route/query params on next commit
-    search_results = search.search("students in Ryerson University and York University")
-    print(search_results)
+    query_string = request.args.get('query')
+    search_results = search.search(query_string)
     return json.dumps(search_results)
 
 if __name__ == "__main__":

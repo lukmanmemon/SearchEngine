@@ -126,4 +126,4 @@ def search(query_input):
 
 
 if __name__ == "__main__":
-    print(search("admissions to"))
+    print(search("students in Ryerson University and York University"))
