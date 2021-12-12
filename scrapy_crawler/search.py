@@ -115,9 +115,9 @@ def search(query_input):
     rank = 1
     top_ret_documents = []
     for key, value in topK_rel_documents:
-        top_ret_documents.append([title_list[key], url_list[key]])
+        top_ret_documents.append([url_list[key], title_list[key], description_list[key]])
         rank = rank + 1
-    print(top_ret_documents)
+
     return top_ret_documents
 
 search("students in Ryerson University and York University")

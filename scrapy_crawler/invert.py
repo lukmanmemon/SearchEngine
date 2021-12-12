@@ -11,18 +11,20 @@ json_content = file_object.read()
 # Convert json file to list
 data_list = json.loads(json_content)
 
+description_list = []
 url_list = []
 content_list = []
 title_list = []
 dictionary = {}
 stopwords_list = []
 
+
 # Get stop words and put into list
 with open("stopwords.txt", 'r') as file_stopwords:
     for line in file_stopwords:
         stopwords_list.extend(line.split())
 
-# Create lists with web page content, titles and URLs
+# Create lists with web page content, titles, URLs and descriptions
 for content in data_list:
     no_tags_content = w3lib.html.remove_tags(str(content['text']))
     tokenized_content = word_tokenize(no_tags_content)
@@ -33,6 +35,13 @@ for content in data_list:
 
     url = content['url']
     url_list.append(url)
+
+    try:
+        description = content['metadata']['opengraph'][0]['properties'][4][1]
+    except IndexError:
+        description = "No description available"
+        
+    description_list.append(description)
 
 ps = PorterStemmer()
 # Put terms in dictionary
