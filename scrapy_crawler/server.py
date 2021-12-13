@@ -4,6 +4,7 @@ import search
 
 app = Flask(__name__)
 
+# TODO: (Optional tbh for the demo)
 # On Server start, check to see whether the crawler/scraper has run and
 # compiled its data, if not then do so ie. check for file Check to see if
 # inverted indices have been generated from scraped data, if not do so
