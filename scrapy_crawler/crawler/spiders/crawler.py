@@ -19,7 +19,7 @@ class WebSpider(CrawlSpider):
         'CLOSESPIDER_PAGECOUNT': '700',
         'HTTPCACHE_ENABLED': 'False',
         'COOKIES_ENABLED': 'False',
-        'LOG_ENABLED': 'True',
+        'LOG_ENABLED': 'False',
         'DEFAULT_REQUEST_HEADERS': {
             'Accept': 'text/html',
             'Accept-Language': 'en',

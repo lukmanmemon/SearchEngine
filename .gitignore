@@ -1,1 +1,4 @@
 **/__pycache__
+**/venv
+*/test_files/*.txt
+*/test_files/*.pckl
