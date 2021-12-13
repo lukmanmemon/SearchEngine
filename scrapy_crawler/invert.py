@@ -105,14 +105,14 @@ def invert(testMode=False, testFilePath=""):
         id = id + 1
         for key in tf_counter:
             tf_counter[key] = 0
-
+        
     # Open txt file and write postings list to it
     write_file_postings = codecs.open(testFilePath + "postings.txt", "w", encoding='utf-8')
     write_file_postings.write( str(postings_list) )
     write_file_postings.close()
     
     # Dump the vars to be used by the search program to provide speed/efficiency when searching through the documents
-    with open(testFilePath + 'InvertVariableStore.pckl', 'wb') as dumped_vars:
+    with codecs.open(testFilePath + 'InvertVariableStore.pckl', 'wb') as dumped_vars:
         pickle.dump([stopwords_list, data_list, url_list, title_list, description_list], dumped_vars)
     
     if testMode:

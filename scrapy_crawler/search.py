@@ -120,7 +120,7 @@ def search(query_input):
     rank = 1
     top_ret_documents = []
     for key, value in topK_rel_documents:
-        top_ret_documents.append([url_list[key], title_list[key], description_list[key]])
+        top_ret_documents.append({"url": url_list[key], "title": title_list[key], "description": description_list[key]})
         rank = rank + 1
 
     return top_ret_documents
