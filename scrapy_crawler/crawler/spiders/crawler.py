@@ -13,10 +13,12 @@ def process_links(links):
 
 class WebSpider(CrawlSpider):
     name = 'web_spider'
-    start_urls = ['https://www.ryerson.ca/', 'https://www.utoronto.ca/', 'https://www.utm.utoronto.ca/', 'https://www.utsc.utoronto.ca/home/', 'https://www.yorku.ca/', 'https://www.yorku.ca/glendon/',  'https://www.ocadu.ca/']
+    allowed_domains = ['ryerson.ca', 'utoronto.ca', 'utm.utoronto.ca', 'utsc.utoronto.ca/home', 'yorku.ca', 'yorku.ca/glendon', 'ocadu.ca']
+    start_urls = ['https://www.utoronto.ca/', 'https://www.yorku.ca/', 'https://www.ryerson.ca/', 'https://www.ocadu.ca/', 'https://www.utsc.utoronto.ca/home/', 'https://www.utm.utoronto.ca/', 'https://www.yorku.ca/glendon/']
+    BASE_URL = 'https://ryerson.ca' 
     custom_settings = {
         'ROBOTSTXT_OBEY': 'True',
-        'CLOSESPIDER_PAGECOUNT': '700',
+        'CLOSESPIDER_PAGECOUNT': '1000',
         'HTTPCACHE_ENABLED': 'False',
         'COOKIES_ENABLED': 'False',
         'LOG_ENABLED': 'False',
