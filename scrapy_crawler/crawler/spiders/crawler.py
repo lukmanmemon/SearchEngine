@@ -13,9 +13,9 @@ def process_links(links):
 
 class WebSpider(CrawlSpider):
     name = 'web_spider'
-    allowed_domains = ['ryerson.ca', 'utoronto.ca', 'utm.utoronto.ca', 'utsc.utoronto.ca/home', 'yorku.ca', 'yorku.ca/glendon', 'ocadu.ca']
-    start_urls = ['https://www.utoronto.ca/', 'https://www.yorku.ca/', 'https://www.ryerson.ca/', 'https://www.ocadu.ca/', 'https://www.utsc.utoronto.ca/home/', 'https://www.utm.utoronto.ca/', 'https://www.yorku.ca/glendon/']
-    BASE_URL = 'https://ryerson.ca' 
+    allowed_domains = ['torontomu.ca', 'utoronto.ca', 'utm.utoronto.ca', 'utsc.utoronto.ca/home', 'yorku.ca', 'yorku.ca/glendon', 'ocadu.ca']
+    start_urls = ['https://www.utoronto.ca/', 'https://www.yorku.ca/', 'https://www.torontomu.ca/', 'https://www.ocadu.ca/', 'https://www.utsc.utoronto.ca/home/', 'https://www.utm.utoronto.ca/', 'https://www.yorku.ca/glendon/']
+    BASE_URL = 'https://torontomu.ca' 
     custom_settings = {
         'ROBOTSTXT_OBEY': 'True',
         'CLOSESPIDER_PAGECOUNT': '1000',
