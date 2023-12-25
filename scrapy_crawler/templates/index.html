@@ -75,6 +75,9 @@
         padding: 1vh; 
         background: #C4D0FB;
       }
+      .results-card:hover {
+        opacity: 0.6 !important;
+      }
       .results-text {
           margin-left: 20px;
           color: #b7bcf1;
@@ -82,6 +85,16 @@
       #title {
           text-align: center;
           color: #b7bcf1;
+      }
+      .loading-spinner {
+        display: none;
+        padding-top: 25vh;
+        justify-content: center;
+      }
+      .result-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     </style>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -92,58 +105,73 @@
 
 
   <body>
-    <h1 id="title">Toronto Universities' Program Information (TUPI) Search Engine</h1>
+    <a href=""><h1 id="title">Toronto Universities' Program Information (TUPI) Search Engine</h1></a>
     <form role="search" id="form">
       <input type="search" id="query" name="q" placeholder="Enter search query" aria-label="Search through site content">
-      <button>
+      <button type="submit" id="search-btn">
         <svg viewBox="0 0 1024 1024"><path class="path1" d="M848.471 928l-263.059-263.059c-48.941 36.706-110.118 55.059-177.412 55.059-171.294 0-312-140.706-312-312s140.706-312 312-312c171.294 0 312 140.706 312 312 0 67.294-24.471 128.471-55.059 177.412l263.059 263.059-79.529 79.529zM189.623 408.078c0 121.364 97.091 218.455 218.455 218.455s218.455-97.091 218.455-218.455c0-121.364-103.159-218.455-218.455-218.455-121.364 0-218.455 97.091-218.455 218.455z"></path></svg>
       </button>
     </form>
     <h2 id="results-text" class="results-text hide">Search Results: </h2>
+    <!-- Results Loading Indicator -->
+    <div id="loading-spinner" class="loading-spinner">
+        <img src="{{ url_for('static', filename='loading.svg') }}" alt="Loading Search Results..." />
+    </div>
     <div id="results" class="results-container">
     </div>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
-      const f = document.getElementById('form');
-      let rsText = document.getElementById('results-text');
-      let results = {}
-      //const q = document.getElementById('query');
-      // const qValue1 = document.querySelector('query')
+            const f = document.getElementById('form');
+            let rsText = document.getElementById('results-text');
+            let results = {}
 
-    function submitted(event) {
-        event.preventDefault();
-        const query = document.getElementById('query').value;
-        const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-        };
-        fetch("http://localhost:3000/search?query=" + query, requestOptions)
-        .then(response => response.json())
-        .then(result => displayResults(result))
-        .catch(error => {console.log('error', error);});
-    }
+            function submitted(event) {
+                event.preventDefault();
+                const searchBtn = document.getElementById('search-btn');
+                const loadingSpinner = document.getElementById('loading-spinner');
+                // Clear prev results
+                document.getElementById('results').innerHTML = "";
+                searchBtn.setAttribute('disabled', true);
+                loadingSpinner.style.display = 'flex';
+                const query = document.getElementById('query').value;
+                const requestOptions = {
+                    method: 'GET',
+                    redirect: 'follow'
+                };
+                fetch("http://localhost:3000/search?query=" + query, requestOptions)
+                    .then(response => response.json())
+                    .then(result => {
+                        loadingSpinner.style.display = 'none';
+                        displayResults(result)
+                    })
+                    .finally(() => {
+                        loadingSpinner.style.display = 'none';
+                        searchBtn.removeAttribute('disabled');
+                    })
+                    .catch(error => { console.log('error', error); });
+            }
 
-    function displayResults(searchResults) {
-        console.log(searchResults)
-        let results = document.getElementById('results');
-        // Clear prev results
-        results.innerHTML = '';
-        f.classList.add('form-result-mode');
-        rsText.classList.remove('hide');
-        searchResults.forEach(searched =>  {
-            results.innerHTML += `<div class='results-card' href='${searched.url}' class='results-card' data-aos='fade-up'>
-                <a href='${searched.url}'>
-                <h2>${searched.title}</h2>
-                <p>${searched.description}</p>
-            </a>
-            </div></br>`
-        });
-    }
+            function displayResults(searchResults) {
+                console.log(searchResults)
+                let results = document.getElementById('results');
+                // Clear prev results
+                results.innerHTML = '';
+                f.classList.add('form-result-mode');
+                rsText.classList.remove('hide');
+                searchResults.forEach(searched => {
+                    results.innerHTML += `<div href='${searched.url}' data-aos='fade-up' class='results-card'>
+                        <a href='${searched.url}'>
+                            <h2 class='result-title'>${searched.title}</h2>
+                            <p>${searched.description}</p>
+                        </a>  
+                        </div></br>`;
+                });
+            }
 
-      f.addEventListener('submit', submitted);
+            f.addEventListener('submit', submitted);
 
-      
+        
     </script>
   </body>
 </html>
