@@ -14,20 +14,20 @@ import json
 with open('InvertVariableStore.pckl', 'rb') as loadable:
     stopwords_list, data_list, url_list, title_list, description_list = pickle.load(loadable)
 
+with codecs.open('dict.txt', encoding='utf-8') as dict_file:
+    dict_data = dict_file.read()
+
+with codecs.open('postings.txt', encoding='utf-8') as postings_file:
+    postings_data = postings_file.read()
+
+# Convert from string to dictionary
+dictionary = ast.literal_eval(dict_data)
+
+# Convert postings list from string to dictionary
+postings_list = ast.literal_eval(postings_data)
+
 
 def search(query_input):
-    with codecs.open('dict.txt', encoding='utf-8') as dict_file:
-        dict_data = dict_file.read()
-
-    with codecs.open('postings.txt', encoding='utf-8') as postings_file:
-        postings_data = postings_file.read()
-
-    # Convert from string to dictionary
-    dictionary = ast.literal_eval(dict_data)
-
-    # Convert postings list from string to dictionary
-    postings_list = ast.literal_eval(postings_data)
-
     # Split input query into tokens
     query_tokens = word_tokenize(query_input)
 
@@ -137,11 +137,7 @@ def search(query_input):
     final_score = {}
     for id in range(num_of_pages):
         # Similarity score is the cosine similarity
-        similarity_score = 0
-        if document_vector_lengths[id] == 0:
-            similarity_score = 0
-        else :
-            similarity_score = (document_vectors_dict[id].dot(query_vector)) / (document_vector_lengths[id] * qvector_length)
+        similarity_score = 0 if document_vector_lengths[id] == 0 else (document_vectors_dict[id].dot(query_vector)) / (document_vector_lengths[id] * qvector_length)
         if math.isnan(similarity_score):
             similarity_score = 0
         
