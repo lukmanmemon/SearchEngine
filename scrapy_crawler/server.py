@@ -1,8 +1,10 @@
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, render_template
 import json
 import search
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app)
 
 # TODO: (Optional tbh for the demo)
 # On Server start, check to see whether the crawler/scraper has run and
@@ -11,11 +13,13 @@ app = Flask(__name__)
 
 
 @app.route("/")
+@cross_origin()
 def display_spa():
-    return send_from_directory('../static', 'index.html')
+    return render_template('index.html')
 
 
 @app.route("/search")
+@cross_origin()
 def search_cosine_pagerank():
     query_string = request.args.get('query')
     search_results = search.search(query_string)
@@ -25,4 +29,4 @@ if __name__ == "__main__":
     # we should uncomment the following for prod
     # from waitress import serve
     # serve(app, host="0.0.0.0", port=8080)
-    app.run(port=3000)
+    app.run(port=3000, debug=True)
